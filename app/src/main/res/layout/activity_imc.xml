@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".imcActivity"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_gravity="center"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextViewForm"
+        android:text="@string/imc_desc" />
+
+    <EditText
+        android:id="@+id/edit_imc_weight"
+        android:hint="@string/weight"
+        style="@style/EditTextForm"
+    />
+
+    <EditText
+        android:id="@+id/edit_imc_height"
+        android:hint="@string/height"
+        style="@style/EditTextForm"
+        />
+
+    <Button
+        android:id="@+id/btn_imc_send"
+        android:text="@string/calc"
+        android:backgroundTint="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
