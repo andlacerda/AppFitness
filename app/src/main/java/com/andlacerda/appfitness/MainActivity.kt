@@ -6,15 +6,19 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnItemClickListener {
     private lateinit var rvMain: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,18 +41,34 @@ class MainActivity : AppCompatActivity() {
         )
         mainItems.add(
             MainItem(id = 2,
-                drawableId = R.drawable.baseline_elevator_24,
+                drawableId = R.drawable.baseline_remove_red_eye_24,
                 textStringId = R.string.tmb,
-                color = Color.GREEN
+                color = Color.YELLOW
             )
         )
 
-        val adapter = MainAdapter(mainItems)
+        val adapter = MainAdapter(mainItems, this)
         rvMain = findViewById(R.id.rv_main)
         rvMain.adapter = adapter
-        rvMain.layoutManager = LinearLayoutManager(this)
+        rvMain.layoutManager = GridLayoutManager(this, 2)
     }
-    private inner class MainAdapter(private val mainItems : List<MainItem>) : RecyclerView.Adapter<MainViewHolder>() {
+
+    override fun onClick(id : Int) {
+        when(id) {
+            1 -> {
+                val intent = Intent(this, imcActivity::class.java)
+                startActivity(intent)
+            }
+            2 -> {
+
+            }
+        }
+        //Toast.makeText(this,"Clicou $id",Toast.LENGTH_SHORT).show()
+    }
+
+    private inner class MainAdapter(
+        private val mainItems : List<MainItem>,
+        private val onItemClickListener : OnItemClickListener) : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
         // 1 - Qual é o layout XML da célula especifica ( item )
         override fun onCreateViewHolder( parent: ViewGroup, viewType: Int): MainViewHolder {
             val view = layoutInflater.inflate(R.layout.main_item, parent, false)
@@ -66,13 +86,24 @@ class MainActivity : AppCompatActivity() {
         override fun getItemCount(): Int {
             return mainItems.size
         }
+
+        private inner class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            fun bind(item: MainItem){
+                val img: ImageView = itemView.findViewById(R.id.item_img_icon)
+                val name: TextView = itemView.findViewById(R.id.item_txt_name)
+                val container: LinearLayout = itemView.findViewById(R.id.item_container_imc)
+
+                img.setImageResource(item.drawableId)
+                name.setText(item.textStringId)
+                container.setBackgroundColor(item.color)
+
+                container.setOnClickListener {
+                    onItemClickListener.onClick(item.id)
+                }
+            }
+        }
     }
 
     // É a classe da célula em si!
-    private class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: MainItem){
-            val buttonTest : Button = itemView.findViewById(R.id.btn_item)
-            buttonTest.setText(item.textStringId)
-        }
-    }
+
 }
